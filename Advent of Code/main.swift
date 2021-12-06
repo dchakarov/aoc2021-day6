@@ -13,27 +13,24 @@ func main() {
     let lines = inputString.components(separatedBy: "\n")
         .filter { !$0.isEmpty }
     
-    // Sample algorithm
-    var scoreboard = [String: Int]()
-    lines.forEach { line in
-        let (name, score) = parseLine(line)
-        scoreboard[name] = score
+    var fishes = lines[0].components(separatedBy: ",").map { Int($0)! }
+    
+    for _ in 0 ..< 80 {
+        var newFishCount = 0
+        for i in 0 ..< fishes.count {
+            if fishes[i] == 0 {
+                fishes[i] = 6
+                newFishCount += 1
+            } else {
+                fishes[i] -= 1
+            }
+        }
+        for _ in 0 ..< newFishCount {
+            fishes.append(8)
+        }
     }
-    scoreboard
-        .sorted { lhs, rhs in
-            lhs.value > rhs.value
-        }
-        .forEach { name, score in
-            print("\(name) \(score) pts")
-        }
-}
-
-func parseLine(_ line: String) -> (name: String, score: Int) {
-    let helper = RegexHelper(pattern: #"([\-\w]*)\s(\d+)"#)
-    let result = helper.parse(line)
-    let name = result[0]
-    let score = Int(result[1])!
-    return (name: name, score: score)
+    
+    print(fishes.count)
 }
 
 main()
